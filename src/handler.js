@@ -62,7 +62,7 @@ const addBookHandler = (request, h) => {
                 },
             });
 
-            response.code(200);
+            response.code(201);
             return response;
         }
             const response = h.response({
@@ -177,12 +177,37 @@ const updatedBookByIdHandler = (request, h) => {
                     message: 'Gagal memperbarui buku. Id tidak ditemukan'
                 });
                 
-                response.code(400);
+                response.code(404);
                 return response;
             }
 
 }
 
+const deletedBookById = (request, h) => {
+    const { bookId } = request.params;
+    const index = books.findIndex( (book) => book.bookId === bookId );
+
+        if(index !== -1){
+            books.splice(bookId, 1);
+
+            const response = h.response({
+                status: 'success',
+                message: 'Buku berhasil dihapus'
+            });
+
+            response.code(200);
+            return response;
+        }else{
+            const response = h.response({
+                status: 'fail',
+                message: 'Buku gagal dihapus. Id tidak ditemukan'
+            });
+
+            response.code(404);
+            return response;
+        }
+}
+
 module.exports = {
-    addBookHandler, getAllBooksHandler, getBookByIdHandler, updatedBookByIdHandler
+    addBookHandler, getAllBooksHandler, getBookByIdHandler, updatedBookByIdHandler, deletedBookById
 }
