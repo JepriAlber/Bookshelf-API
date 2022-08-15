@@ -76,18 +76,41 @@ const addBookHandler = (request, h) => {
 
 }
 
-const getAllBooksHandler = () => ({
-    status: 'success',
-    data: {
-        books: books.map( (book) => ({ 
-            id: book.bookId,
-            name: book.name,
-            publisher: book.publisher
-        })),
-    } 
-});
+const getAllBooksHandler = (request, h) => {
+
+    let filterBooks = books;
+
+    const { name, reading, finished } = request.query;
+
+    if(name !== undefined){
+        filterBooks = filterBooks.filter( (book) => book.name.toLowerCase().include(name.toLowerCase()) ); //include untuk mencari apakah suatu substring berada dalam suatu string
+    }
+
+    if(reading !== undefined){
+        filterBooks = filterBooks.filter( (book) => book.reading === !!Number(reading) ); //!!Number() akan memberikan nilai true atau false jika 0 false 1 true
+    }
+
+    if(finished !== undefined){
+        filterBooks = filterBooks.filter( (book) => book.finished === !!Number(finished) );
+    }
+
+    const response = h.response({
+        status: 'success',
+        data: {
+            books: filterBooks.map( (book) => ({ 
+                id: book.bookId,
+                name: book.name,
+                publisher: book.publisher
+            })),
+        } 
+    });
+    response.code(200);
+    return response;
+
+};
 
 const getBookByIdHandler = (request, h) => {
+
     const { bookId } = request.params;
     const book = books.filter( (n) => n.bookId === bookId)[0];
 
@@ -107,9 +130,11 @@ const getBookByIdHandler = (request, h) => {
             response.code(404);
             return response;
         }
+
 }
 
 const updatedBookByIdHandler = (request, h) => {
+
     const { bookId } = request.params;
     const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
     const updatedAt = new Date().toISOString();
@@ -184,6 +209,7 @@ const updatedBookByIdHandler = (request, h) => {
 }
 
 const deletedBookById = (request, h) => {
+
     const { bookId } = request.params;
     const index = books.findIndex( (book) => book.bookId === bookId );
 
@@ -206,6 +232,7 @@ const deletedBookById = (request, h) => {
             response.code(404);
             return response;
         }
+        
 }
 
 module.exports = {
