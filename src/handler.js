@@ -6,8 +6,8 @@ const addBookHandler = (request, h) => {
     const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
 
     const id = nanoid(16);
-    const insertedAT = new Date().toISOString();
-    const updatedAt = insertedAT;
+    const insertedAt = new Date().toISOString();
+    const updatedAt = insertedAt;
     let finished = false;
 
         //untuk memastikan nilai banding (page dan read) bertipe number
@@ -41,7 +41,7 @@ const addBookHandler = (request, h) => {
 
     //buat variabel baru untuk menampung data 
     const newBook = {
-        id, name, year, author, summary, publisher, pageCount, readPage, finished, reading, insertedAT, updatedAt,
+        id, name, year, author, summary, publisher, pageCount, readPage, finished, reading, insertedAt, updatedAt,
     };
 
     books.push(newBook);
