@@ -136,9 +136,10 @@ const getBookByIdHandler = (request, h) => {
 const updatedBookByIdHandler = (request, h) => {
 
     const { bookId } = request.params;
-    const { name, year, author, summary, publisher, pageCount, readPage, reading, insertedAt } = request.payload;
+    const { name, year, author, summary, publisher, pageCount, readPage, reading} = request.payload;
     const updatedAt = new Date().toISOString();
     let finished;
+    
         //untuk memastikan nilai banding (page dan read) bertipe number
         if( typeof pageCount == 'number' && typeof readPage == 'number'){
             //status membaca buku menjadi true ketika halaman baca sama dengan total halaman buku
@@ -182,7 +183,6 @@ const updatedBookByIdHandler = (request, h) => {
                     readPage, 
                     finished, 
                     reading,
-                    insertedAt, 
                     updatedAt,
                 };
 
